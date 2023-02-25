@@ -45,15 +45,44 @@ bool isFileSorted(const string fileName)
   return true;
 }
 
-void sortFile(string fileName)
+bool sortFile(const string fileName)
 {
   
+  ifstream file (fileName);
+  ofstream file1 ("1.txt");
+  ofstream file2 ("2.txt");
+  if ( !file.is_open() || !file1.is_open() || !file2.is_open())
+    return -1;
+  int x,i;
+  file>>x;
+  while (file)
+    {
+      i=0;
+      while(file && i<1)
+        {
+          file1<<x<<' ';
+          file>>x;
+          i++;
+        }
+      i=0;
+      while(file && i<1)
+        {
+          file2<<x<<' ';
+          file>>x;
+          i++;
+        }
+    }
+  file.close();
+  file1.close();
+  file2.close();
+  return true;
 }
 
 
 int main()
 {
   string fileName = "test.txt";
-  createFileWithRandomNumbers(fileName,3,7);
+  createFileWithRandomNumbers(fileName,10,7);
+  sortFile(fileName);
 return 0;
 }
