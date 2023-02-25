@@ -51,7 +51,7 @@ void sortFile(string fileName)
 }
 
 
-int main() 
+int main()
 {
   string fileName = "test.txt";
   createFileWithRandomNumbers(fileName,3,7);
