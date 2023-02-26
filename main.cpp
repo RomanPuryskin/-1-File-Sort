@@ -2,6 +2,9 @@
 #include <random>
 #include <fstream>
 using namespace std;
+//-----------------Функции----------------//
+
+
 //Создание файла с рандомными числами
 bool createFileWithRandomNumbers(const string &fileName, const int numbersCount,const int maxNumberValue)
 {
@@ -23,8 +26,10 @@ bool createFileWithRandomNumbers(const string &fileName, const int numbersCount,
   return true;
 }
 
+
+
 //Проверка файла на упорядоченность
-bool isFileSorted(const string fileName)
+bool isFileSorted(const string &fileName)
 {
   int temp, temp1;
   ifstream *file = new ifstream(fileName);
@@ -45,7 +50,77 @@ bool isFileSorted(const string fileName)
   return true;
 }
 
-bool sortFile(const string fileName)
+
+
+//Функция слияния файлов
+bool mixFiles(const string &fileName1, const string &fileName2, const string &fileName3, const string &fileName4, int p)
+{
+  int x,y,i,j;
+  ifstream file1(fileName1);
+  ifstream file2(fileName2);
+  ofstream filesToWrite[2]= {ofstream (fileName3), ofstream(fileName4)}; // сюда будем записывать числа
+  if ( !file1.is_open() || !file2.is_open())
+    return -1;
+  for (j =0; j<2; j++)
+    {
+      if(!filesToWrite[j].is_open())
+        return -1;
+    }
+  file1>>x;
+  file2>>y;
+  int n=0;
+  while(file1 && file2)
+    {
+      i=j=0;
+      while (file1 && file2 && i<p && j<p)
+        {
+          if (x<y)
+          {
+            filesToWrite[n]<<x<<' ';
+            file1>>x;
+            i++;
+          }
+          else
+          {
+            filesToWrite[n]<<y<<' ';
+            file2>>y;
+            j++;
+          }
+        }
+
+      while (file1 && i<p)
+        {
+          filesToWrite[n]<<x<<' ';
+          file1>>x;
+          i++;
+        }
+      while(file2 && j<p)
+        {
+          filesToWrite[n]<<y<<' ';
+          file2>>y;
+          j++;
+        }
+      n=1-n;
+    }
+
+  while (file1)
+    {
+      filesToWrite[n]<<x<<' ';
+      file1>>x;
+    }
+  while (file2)
+    {
+      filesToWrite[n]<<y<<' ';
+      file2>>y;
+    }
+return true;
+fcloseall();
+}
+
+
+
+//Реализация сортировки
+bool sortFile(const string &fileName)
 {
   
   ifstream file (fileName);
@@ -54,6 +129,7 @@ bool sortFile(const string fileName)
   if ( !file.is_open() || !file1.is_open() || !file2.is_open())
     return -1;
   int x,i;
+  // сначала разобьем файл на 2
   file>>x;
   while (file)
     {
@@ -72,11 +148,11 @@ bool sortFile(const string fileName)
           i++;
         }
     }
-  file.close();
-  file1.close();
-  file2.close();
+  fcloseall();
   return true;
 }
+
+
 
 
 int main()
