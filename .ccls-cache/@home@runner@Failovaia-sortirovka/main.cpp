@@ -1,6 +1,8 @@
 #include <iostream>
 #include <random>
 #include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
 using namespace std;
 //-----------------Функции----------------//
 
@@ -122,14 +124,17 @@ fcloseall();
 //Реализация сортировки
 bool sortFile(const string &fileName)
 {
-  
+  string fileName1 = "1.txt";
+  string fileName2 = "2.txt";
+  string fileName3 = "3.txt";
+  string fileName4 = "4.txt";
   ifstream file (fileName);
-  ofstream file1 ("1.txt");
-  ofstream file2 ("2.txt");
+  ofstream file1 (fileName1);
+  ofstream file2 (fileName2);
   if ( !file.is_open() || !file1.is_open() || !file2.is_open())
     return -1;
   int x,i;
-  // сначала 
+  // сначала разобьем файл на 2
   file>>x;
   while (file)
     {
@@ -148,7 +153,28 @@ bool sortFile(const string &fileName)
           i++;
         }
     }
-  fcloseall();
+  file.close();
+  file1.close();
+  file2.close();
+  int p = 1;
+  while (file2)
+    {
+      ifstream file1 (fileName1);
+      ifstream file2 (fileName2);
+      ofstream file3 (fileName3);
+      ofstream file4 (fileName4);
+      mixFiles(fileName3,fileName4,fileName1,fileName2,p);
+      /*file1.close();
+      file2.close();
+      file3.close();
+      file4.close();*/
+      p=2*p;
+      ofstream file1 (fileName1);
+      ofstream file2 (fileName2);
+      ifstream file3 (fileName3);
+      ifstream file4 (fileName4);
+      mixFiles(fileName1,fileName2,fileName1,fileName2,p);
+    }
   return true;
 }
 

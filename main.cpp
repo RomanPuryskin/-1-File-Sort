@@ -1,6 +1,8 @@
 #include <iostream>
 #include <random>
 #include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
 using namespace std;
 //-----------------Функции----------------//
 
@@ -50,6 +52,39 @@ bool isFileSorted(const string &fileName)
   return true;
 }
 
+
+// функция разбиения файла на 2
+bool shareFiles(const string &fileName , const string &fileName1 , const string &fileName2)
+{
+  int n ,i , x;
+  ifstream file(fileName);
+  ofstream file1(fileName1);
+  ofstream file2(fileName2);
+  if ( !file.is_open() || !file1.is_open() || !file2.is_open())
+    return -1;
+  file>>x;
+  while (file)
+    {
+      i=0;
+      while(file && i<1)
+        {
+          file1<<x<<' ';
+          file>>x;
+          i++;
+        }
+      i=0;
+      while(file && i<1)
+        {
+          file2<<x<<' ';
+          file>>x;
+          i++;
+        }
+    }
+  file.close();
+  file1.close();
+  file2.close();
+  return true;
+}
 
 
 //Функция слияния файлов
@@ -113,8 +148,13 @@ bool mixFiles(const string &fileName1, const string &fileName2, const string &fi
       filesToWrite[n]<<y<<' ';
       file2>>y;
     }
-return true;
-fcloseall();
+  file1.close();
+  file2.close();
+  for (j =0; j<2; j++)
+    {
+      filesToWrite[j].close();
+    }
+  return true;
 }
 
 
@@ -122,10 +162,18 @@ fcloseall();
 //Реализация сортировки
 bool sortFile(const string &fileName)
 {
-  
-  ifstream file (fileName);
-  ofstream file1 ("1.txt");
-  ofstream file2 ("2.txt");
+  string fileName1 = "1.txt";
+  string fileName2 = "2.txt";
+  string fileName3 = "3.txt";
+  string fileName4 = "4.txt";
+  shareFiles(fileName , fileName1 , fileName2);
+  mixFiles(fileName1 , fileName2, fileName3, fileName4,1);
+  mixFiles(fileName3 , fileName4, fileName1, fileName2,2);
+  mixFiles(fileName1 , fileName2, fileName3, fileName4,4);
+  mixFiles(fileName3 , fileName4, fileName1, fileName2,8);
+  /*ifstream file (fileName);
+  ofstream file1 (fileName1);
+  ofstream file2 (fileName2);
   if ( !file.is_open() || !file1.is_open() || !file2.is_open())
     return -1;
   int x,i;
@@ -148,7 +196,29 @@ bool sortFile(const string &fileName)
           i++;
         }
     }
-  fcloseall();
+  file.close();
+  file1.close();
+  //file2.close();
+  int p = 1;
+  while (file2)
+    {
+      /*ifstream file1 (fileName1);
+      ifstream file2 (fileName2);
+      ofstream file3 (fileName3);
+      ofstream file4 (fileName4);
+      mixFiles(fileName3,fileName4,fileName1,fileName2,p);
+      /*file1.close();
+      file2.close();
+      file3.close();
+      file4.close();
+      p=2*p;
+      ofstream file1 (fileName1);
+      ofstream file2 (fileName2);
+      ifstream file3 (fileName3);
+      ifstream file4 (fileName4);
+      mixFiles(fileName1,fileName2,fileName1,fileName2,p);
+      p=2*p;
+    }*/
   return true;
 }
 
