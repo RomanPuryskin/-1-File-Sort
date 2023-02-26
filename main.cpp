@@ -160,75 +160,66 @@ bool mixFiles(const string &fileName1, const string &fileName2, const string &fi
 
 
 //Реализация сортировки
-bool sortFile(const string &fileName)
+int sortFile(const string &fileName)
 {
+  int p = 1;
+  int x;
   string fileName1 = "1.txt";
   string fileName2 = "2.txt";
   string fileName3 = "3.txt";
   string fileName4 = "4.txt";
-  shareFiles(fileName , fileName1 , fileName2);
-  mixFiles(fileName1 , fileName2, fileName3, fileName4,1);
-  mixFiles(fileName3 , fileName4, fileName1, fileName2,2);
-  mixFiles(fileName1 , fileName2, fileName3, fileName4,4);
-  mixFiles(fileName3 , fileName4, fileName1, fileName2,8);
-  /*ifstream file (fileName);
-  ofstream file1 (fileName1);
-  ofstream file2 (fileName2);
-  if ( !file.is_open() || !file1.is_open() || !file2.is_open())
+  //shareFiles(fileName , fileName1 , fileName2);
+  ifstream file2(fileName2);
+  ifstream file3(fileName3);
+  if (!file2.is_open() || !file3.is_open())
     return -1;
-  int x,i;
-  // сначала разобьем файл на 2
-  file>>x;
-  while (file)
-    {
-      i=0;
-      while(file && i<1)
-        {
-          file1<<x<<' ';
-          file>>x;
-          i++;
-        }
-      i=0;
-      while(file && i<1)
-        {
-          file2<<x<<' ';
-          file>>x;
-          i++;
-        }
+  shareFiles(fileName , fileName1 , fileName2);
+  while( file2>>x ) 
+    { 
+      mixFiles(fileName1 , fileName2, fileName3, fileName4,p);
+      p=p*2;
+      mixFiles(fileName3 , fileName4, fileName1, fileName2,p);
+      p=p*2;
     }
-  file.close();
-  file1.close();
-  //file2.close();
-  int p = 1;
-  while (file2)
+  file2.close();
+  if (!isFileSorted(fileName3) )
     {
-      /*ifstream file1 (fileName1);
-      ifstream file2 (fileName2);
-      ofstream file3 (fileName3);
-      ofstream file4 (fileName4);
-      mixFiles(fileName3,fileName4,fileName1,fileName2,p);
-      /*file1.close();
-      file2.close();
       file3.close();
-      file4.close();
-      p=2*p;
-      ofstream file1 (fileName1);
-      ofstream file2 (fileName2);
-      ifstream file3 (fileName3);
-      ifstream file4 (fileName4);
-      mixFiles(fileName1,fileName2,fileName1,fileName2,p);
-      p=2*p;
-    }*/
-  return true;
+      return -2;
+    }
+  file3.close();
+  return 1;
 }
 
 
+int createAndSortFile(const string &fileName,const int numbersCount,const int maxNumberValue)
+{
+  if(!createFileWithRandomNumbers(fileName,numbersCount,maxNumberValue))
+    return -1;
+  if (sortFile(fileName) )
+    return 1;
+  else 
+    return -2;
+}
 
 
 int main()
 {
   string fileName = "test.txt";
-  createFileWithRandomNumbers(fileName,10,7);
-  sortFile(fileName);
-return 0;
+  const int numbersCount = 100;
+  const int maxNumberValue = 1000;
+  switch(createAndSortFile(fileName,numbersCount,maxNumberValue))
+    {
+      case -1:
+      cout<<"Test failed:File didnt created";
+      break;
+
+      case -2:
+      cout<<"Test failed: isnt corted";
+      break;
+
+      case 1:
+      cout<<"Test passed";
+      break;
+    }
 }
